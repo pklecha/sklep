@@ -6,12 +6,10 @@
  * Date: 19.03.17
  * Time: 13:35
  */
-class User
+class User extends BaseUser
 {
     private $firstName;
     private $lastName;
-    private $email;
-    private $password;
 
     /**
      * @return mixed
@@ -44,30 +42,5 @@ class User
     {
         $this->lastName = $lastName;
     }
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @param mixed $password
-     */
-    public function setPassword($password)
-    {
-        $this->password = $password;
-    }
-
 
 }
