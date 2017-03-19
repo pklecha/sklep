@@ -12,7 +12,18 @@ class Product
     private $price;
     private $decription;
     private $stock;
+    private $pictures;
 
+    public function getPictures()
+    {
+        // 
+    }
+
+    public function addPicture()
+    {
+        
+    }
+    
     /**
      * @return mixed
      */
@@ -77,5 +88,19 @@ class Product
         $this->stock = $stock;
     }
 
+    public function addToStock($quantity)
+    {
+        $this->stock += $quantity;
+    }
+
+    public function removefromStock($quantity)
+    {
+        $this->stock -= $quantity;
+    }
+
+    public function saveDB()
+    {
+        
+    }
 
 }
