@@ -1,0 +1,11 @@
+{
+    "name": "coderslab/sklep",
+    "description": "Prosty sklep online",
+    "require": {
+        "phpunit/phpunit": "^6.0",
+        "phpunit/dbunit": "^3.0"
+    },
+    "autoload": {
+        "psr-0" : {"": "src/"}
+    }
+}
