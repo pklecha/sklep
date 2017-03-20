@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+- phpMyAdmin XML Dump
+- version 4.6.5.2deb1+deb.cihar.com~xenial.3
+- https://www.phpmyadmin.net
+-
+- Host: localhost
+- Czas generowania: 20 Mar 2017, 18:56
+- Wersja serwera: 5.7.17-0ubuntu0.16.04.1
+- Wersja PHP: 7.0.13-0ubuntu0.16.04.1
+-->
+
+<pma_xml_export version="1.0" xmlns:pma="https://www.phpmyadmin.net/some_doc_url/">
+    <!--
+    - Structure schemas
+    -->
+    <pma:structure_schemas>
+        <pma:database name="sklep" collation="utf8_general_ci" charset="utf8">
+            <pma:table name="address">
+                CREATE TABLE `address` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `street` varchar(255) NOT NULL,
+                  `postcode` varchar(255) NOT NULL,
+                  `town` varchar(255) NOT NULL,
+                  `user_id` int(11) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `user_id` (`user_id`),
+                  CONSTRAINT `address_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+            </pma:table>
+            <pma:table name="admin">
+                CREATE TABLE `admin` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `name` varchar(255) NOT NULL,
+                  `email` varchar(255) NOT NULL,
+                  `password` varchar(255) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  UNIQUE KEY `email` (`email`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+            </pma:table>
+            <pma:table name="category">
+                CREATE TABLE `category` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `name` varchar(255) NOT NULL,
+                  `description` text NOT NULL,
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+            </pma:table>
+            <pma:table name="message">
+                CREATE TABLE `message` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `admin_id` int(11) NOT NULL,
+                  `order_id` int(11) NOT NULL,
+                  `message` text NOT NULL,
+                  `datetime` datetime NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `admin_id` (`admin_id`),
+                  KEY `order_id` (`order_id`),
+                  CONSTRAINT `message_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`),
+                  CONSTRAINT `message_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+            </pma:table>
+            <pma:table name="order">
+                CREATE TABLE `order` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `datetime` datetime NOT NULL,
+                  `user_id` int(11) NOT NULL,
+                  `totalprice` decimal(7,2) NOT NULL,
+                  `status` varchar(255) NOT NULL,
+                  `comments` text NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `user_id` (`user_id`),
+                  CONSTRAINT `order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+            </pma:table>
+            <pma:table name="orderedproducts">
+                CREATE TABLE `orderedproducts` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `product_id` int(11) NOT NULL,
+                  `order_id` int(11) NOT NULL,
+                  `purchaseprice` decimal(7,2) NOT NULL,
+                  `quantity` int(11) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `product_id` (`product_id`),
+                  KEY `order_id` (`order_id`),
+                  CONSTRAINT `orderedproducts_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+                  CONSTRAINT `orderedproducts_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+            </pma:table>
+            <pma:table name="photo">
+                CREATE TABLE `photo` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `path` varchar(255) NOT NULL,
+                  `product_id` int(11) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `product_id` (`product_id`),
+                  CONSTRAINT `photo_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+            </pma:table>
+            <pma:table name="product">
+                CREATE TABLE `product` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `name` varchar(255) NOT NULL,
+                  `description` text NOT NULL,
+                  `stock` int(11) NOT NULL,
+                  `price` decimal(7,2) NOT NULL,
+                  `category_id` int(11) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  KEY `category_id` (`category_id`),
+                  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+            </pma:table>
+            <pma:table name="user">
+                CREATE TABLE `user` (
+                  `id` int(11) NOT NULL AUTO_INCREMENT,
+                  `firstname` varchar(255) NOT NULL,
+                  `lastname` varchar(255) NOT NULL,
+                  `email` varchar(255) NOT NULL,
+                  `password` varchar(255) NOT NULL,
+                  PRIMARY KEY (`id`),
+                  UNIQUE KEY `email` (`email`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+            </pma:table>
+        </pma:database>
+    </pma:structure_schemas>
+
+    <!--
+    - Baza danych: 'sklep'
+    -->
+    <database name="sklep">
+        <!-- Tabela user -->
+        <table name="user">
+            <column name="id">1</column>
+            <column name="firstname">Jan</column>
+            <column name="lastname">Kowalski</column>
+            <column name="email">jan.kowalski@wp.pl</column>
+            <column name="password">123456</column>
+        </table>
+        <table name="user">
+            <column name="id">2</column>
+            <column name="firstname">Marek</column>
+            <column name="lastname">Nowak</column>
+            <column name="email">marek.nowak@o2.pl</column>
+            <column name="password">123456</column>
+        </table>
+        <table name="user">
+            <column name="id">3</column>
+            <column name="firstname">Karolina</column>
+            <column name="lastname">Majewska</column>
+            <column name="email">karolina.majewska@wp.pl</column>
+            <column name="password">123456</column>
+        </table>
+        <table name="user">
+            <column name="id">4</column>
+            <column name="firstname">Beata</column>
+            <column name="lastname">Laska</column>
+            <column name="email">beata.laska@gmail.com</column>
+            <column name="password">123456</column>
+        </table>
+        <!-- Tabela address -->
+        <table name="address">
+            <column name="id">1</column>
+            <column name="street">Klonowa 12</column>
+            <column name="postcode">43-100</column>
+            <column name="town">Tychy</column>
+            <column name="user_id">1</column>
+        </table>
+        <table name="address">
+            <column name="id">2</column>
+            <column name="street">Mariacka 3/5</column>
+            <column name="postcode">43-100</column>
+            <column name="town">Tychy</column>
+            <column name="user_id">2</column>
+        </table>
+        <table name="address">
+            <column name="id">3</column>
+            <column name="street">Lasowa 20A</column>
+            <column name="postcode">52-547</column>
+            <column name="town">Łódź</column>
+            <column name="user_id">3</column>
+        </table>
+        <table name="address">
+            <column name="id">4</column>
+            <column name="street">Bajkowa 5/65</column>
+            <column name="postcode">32-621</column>
+            <column name="town">Bydgoszcz</column>
+            <column name="user_id">4</column>
+        </table>
+        <!-- Tabela admin -->
+        <table name="admin">
+            <column name="id">1</column>
+            <column name="name">Plaskacz</column>
+            <column name="email">plaskacz@gmail.com</column>
+            <column name="password">123456</column>
+        </table>
+        <table name="admin">
+            <column name="id">2</column>
+            <column name="name">Wiewiór</column>
+            <column name="email">wiewior@onet.pl</column>
+            <column name="password">123456</column>
+        </table>
+        <!-- Tabela category -->
+        <table name="category">
+            <column name="id">1</column>
+            <column name="name">Kryminał</column>
+            <column name="description"></column>
+        </table>
+        <table name="category">
+            <column name="id">2</column>
+            <column name="name">Filozofia</column>
+            <column name="description"></column>
+        </table>
+        <table name="category">
+            <column name="id">3</column>
+            <column name="name">Komiks</column>
+            <column name="description"></column>
+        </table>
+        <!-- Tabela product -->
+        <table name="product">
+            <column name="id">1</column>
+            <column name="name">Maja w ogrodzie</column>
+            <column name="description">afgs asdgnh sdfgbhnb sdfgb.</column>
+            <column name="stock">10</column>
+            <column name="price">20.50</column>
+            <column name="category_id">1</column>
+        </table>
+        <table name="product">
+            <column name="id">2</column>
+            <column name="name">Alicja w krainie kangurów</column>
+            <column name="description">asdfg sdfgnzsdfxcv dgfbnn.</column>
+            <column name="stock">10</column>
+            <column name="price">15.24</column>
+            <column name="category_id">1</column>
+        </table>
+        <table name="product">
+            <column name="id">3</column>
+            <column name="name">Mikołajek</column>
+            <column name="description">sdfgyhjkl;sdfghjk edrgthjd ertfyguhjmn.</column>
+            <column name="stock">10</column>
+            <column name="price">21.45</column>
+            <column name="category_id">1</column>
+        </table>
+        <table name="product">
+            <column name="id">4</column>
+            <column name="name">Piotruś Pan</column>
+            <column name="description">wdefghj erfgthj dhyj.</column>
+            <column name="stock">10</column>
+            <column name="price">42.32</column>
+            <column name="category_id">3</column>
+        </table>
+        <!-- Tabela order -->
+        <table name="order">
+            <column name="id">1</column>
+            <column name="datetime">2017-03-01 00:00:00</column>
+            <column name="user_id">1</column>
+            <column name="totalprice">51.41</column>
+            <column name="status">opłacone</column>
+            <column name="comments"></column>
+        </table>
+        <table name="order">
+            <column name="id">2</column>
+            <column name="datetime">2017-03-01 00:00:00</column>
+            <column name="user_id">2</column>
+            <column name="totalprice">52.41</column>
+            <column name="status">zrealizowane</column>
+            <column name="comments"></column>
+        </table>
+        <table name="order">
+            <column name="id">3</column>
+            <column name="datetime">2017-03-02 00:00:00</column>
+            <column name="user_id">1</column>
+            <column name="totalprice">20.40</column>
+            <column name="status">zrealizowane</column>
+            <column name="comments"></column>
+        </table>
+        <table name="order">
+            <column name="id">4</column>
+            <column name="datetime">2017-03-02 00:00:00</column>
+            <column name="user_id">3</column>
+            <column name="totalprice">50.00</column>
+            <column name="status">złożone</column>
+            <column name="comments"></column>
+        </table>
+        <!-- Tabela orderedproducts -->
+        <table name="orderedproducts">
+            <column name="id">1</column>
+            <column name="product_id">1</column>
+            <column name="order_id">3</column>
+            <column name="purchaseprice">12.35</column>
+            <column name="quantity">2</column>
+        </table>
+        <table name="orderedproducts">
+            <column name="id">2</column>
+            <column name="product_id">3</column>
+            <column name="order_id">3</column>
+            <column name="purchaseprice">12.00</column>
+            <column name="quantity">1</column>
+        </table>
+        <table name="orderedproducts">
+            <column name="id">3</column>
+            <column name="product_id">2</column>
+            <column name="order_id">4</column>
+            <column name="purchaseprice">12.20</column>
+            <column name="quantity">1</column>
+        </table>
+        <table name="orderedproducts">
+            <column name="id">4</column>
+            <column name="product_id">4</column>
+            <column name="order_id">3</column>
+            <column name="purchaseprice">12.00</column>
+            <column name="quantity">1</column>
+        </table>
+        <!-- Tabela photo -->
+        <table name="photo">
+            <column name="id">1</column>
+            <column name="path">images/dd.jpg</column>
+            <column name="product_id">1</column>
+        </table>
+        <table name="photo">
+            <column name="id">2</column>
+            <column name="path">images/hhh.jpg</column>
+            <column name="product_id">1</column>
+        </table>
+        <table name="photo">
+            <column name="id">3</column>
+            <column name="path">images/aaa.jpg</column>
+            <column name="product_id">2</column>
+        </table>
+        <table name="photo">
+            <column name="id">4</column>
+            <column name="path">images/bbb.jpg</column>
+            <column name="product_id">3</column>
+        </table>
+        <!-- Tabela message -->
+        <table name="message">
+            <column name="id">1</column>
+            <column name="admin_id">1</column>
+            <column name="order_id">2</column>
+            <column name="message">kgkh kfghjkl.</column>
+            <column name="datetime">2017-03-01 00:00:00</column>
+        </table>
+        <table name="message">
+            <column name="id">2</column>
+            <column name="admin_id">1</column>
+            <column name="order_id">2</column>
+            <column name="message">rdytyugioo</column>
+            <column name="datetime">2017-03-02 00:00:00</column>
+        </table>
+        <table name="message">
+            <column name="id">3</column>
+            <column name="admin_id">2</column>
+            <column name="order_id">2</column>
+            <column name="message">dfghjkl.</column>
+            <column name="datetime">2017-03-03 00:00:00</column>
+        </table>
+        <table name="message">
+            <column name="id">4</column>
+            <column name="admin_id">2</column>
+            <column name="order_id">3</column>
+            <column name="message">fghjk.</column>
+            <column name="datetime">2017-03-11 00:00:00</column>
+        </table>
+    </database>
+</pma_xml_export>
