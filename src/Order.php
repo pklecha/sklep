@@ -8,22 +8,48 @@
  */
 class Order
 {
+    private $id;
     private $status;
+    private $products;
+    private $date;
+    private $orderHistory;
+    private $messages;
 
-    /**
-     * @return mixed
-     */
+    public function __construct(Cart $cart)
+    {
+        $this->products = $cart->getProducts();
+        $this->date = date();
+    }
+
+    private function getId()
+    {
+        return $this->id;
+    }
+
+    private function getDate()
+    {
+        return $this->date;
+    }
+
+    public function getOrderHistory()
+    {
+
+    }
+
+    public function getOrderMessages()
+    {
+
+    }
+
     public function getStatus()
     {
         return $this->status;
     }
 
-    /**
-     * @param mixed $status
-     */
-    public function setStatus($status)
+    public function setStatus($status, Admin $admin)
     {
         $this->status = $status;
+        // TODO dodac wpis do historii
     }
 
 }

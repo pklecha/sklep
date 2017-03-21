@@ -10,6 +10,7 @@ abstract class BaseUser
 {
     private $email;
     private $password;
+    private $messages = [];
 
     /**
      * @return mixed
@@ -32,7 +33,7 @@ abstract class BaseUser
      */
     public function setPassword($password)
     {
-        $this->password = $password;
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
 
     public function getPasswordHash()

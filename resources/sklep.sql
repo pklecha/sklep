@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2deb1+deb.cihar.com~xenial.3
--- https://www.phpmyadmin.net/
+-- version 4.5.4.1deb2ubuntu2
+-- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Czas generowania: 20 Mar 2017, 18:51
--- Wersja serwera: 5.7.17-0ubuntu0.16.04.1
--- Wersja PHP: 7.0.13-0ubuntu0.16.04.1
+-- Generation Time: Mar 21, 2017 at 11:10 PM
+-- Server version: 5.7.17-0ubuntu0.16.04.1
+-- PHP Version: 7.0.15-0ubuntu0.16.04.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,13 +17,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Baza danych: `sklep`
+-- Database: `sklep`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `address`
+-- Table structure for table `address`
 --
 
 CREATE TABLE `address` (
@@ -37,7 +37,7 @@ CREATE TABLE `address` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `admin`
+-- Table structure for table `admin`
 --
 
 CREATE TABLE `admin` (
@@ -50,7 +50,7 @@ CREATE TABLE `admin` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `category`
+-- Table structure for table `category`
 --
 
 CREATE TABLE `category` (
@@ -62,7 +62,7 @@ CREATE TABLE `category` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `message`
+-- Table structure for table `message`
 --
 
 CREATE TABLE `message` (
@@ -70,18 +70,18 @@ CREATE TABLE `message` (
   `admin_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `message` text NOT NULL,
-  `datetime` datetime NOT NULL
+  `datetime` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `order`
+-- Table structure for table `order`
 --
 
 CREATE TABLE `order` (
   `id` int(11) NOT NULL,
-  `datetime` datetime NOT NULL,
+  `datetime` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `totalprice` decimal(7,2) NOT NULL,
   `status` varchar(255) NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE `order` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `orderedproducts`
+-- Table structure for table `orderedproducts`
 --
 
 CREATE TABLE `orderedproducts` (
@@ -105,7 +105,7 @@ CREATE TABLE `orderedproducts` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `photo`
+-- Table structure for table `photo`
 --
 
 CREATE TABLE `photo` (
@@ -117,7 +117,7 @@ CREATE TABLE `photo` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `product`
+-- Table structure for table `product`
 --
 
 CREATE TABLE `product` (
@@ -132,7 +132,7 @@ CREATE TABLE `product` (
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
@@ -144,7 +144,7 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Indeksy dla zrzutów tabel
+-- Indexes for dumped tables
 --
 
 --
@@ -216,88 +216,88 @@ ALTER TABLE `user`
 --
 
 --
--- AUTO_INCREMENT dla tabeli `address`
+-- AUTO_INCREMENT for table `address`
 --
 ALTER TABLE `address`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `admin`
+-- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `category`
+-- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `message`
+-- AUTO_INCREMENT for table `message`
 --
 ALTER TABLE `message`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `order`
+-- AUTO_INCREMENT for table `order`
 --
 ALTER TABLE `order`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `orderedproducts`
+-- AUTO_INCREMENT for table `orderedproducts`
 --
 ALTER TABLE `orderedproducts`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `photo`
+-- AUTO_INCREMENT for table `photo`
 --
 ALTER TABLE `photo`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `product`
+-- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- AUTO_INCREMENT dla tabeli `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
--- Ograniczenia dla zrzutów tabel
+-- Constraints for dumped tables
 --
 
 --
--- Ograniczenia dla tabeli `address`
+-- Constraints for table `address`
 --
 ALTER TABLE `address`
   ADD CONSTRAINT `address_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
--- Ograniczenia dla tabeli `message`
+-- Constraints for table `message`
 --
 ALTER TABLE `message`
   ADD CONSTRAINT `message_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`),
   ADD CONSTRAINT `message_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`);
 
 --
--- Ograniczenia dla tabeli `order`
+-- Constraints for table `order`
 --
 ALTER TABLE `order`
   ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
 
 --
--- Ograniczenia dla tabeli `orderedproducts`
+-- Constraints for table `orderedproducts`
 --
 ALTER TABLE `orderedproducts`
   ADD CONSTRAINT `orderedproducts_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
   ADD CONSTRAINT `orderedproducts_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`);
 
 --
--- Ograniczenia dla tabeli `photo`
+-- Constraints for table `photo`
 --
 ALTER TABLE `photo`
   ADD CONSTRAINT `photo_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`);
 
 --
--- Ograniczenia dla tabeli `product`
+-- Constraints for table `product`
 --
 ALTER TABLE `product`
   ADD CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);

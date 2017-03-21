@@ -8,20 +8,50 @@
  */
 class Product
 {
+    private $id;
     private $name;
     private $price;
-    private $decription;
+    private $description;
     private $stock;
     private $pictures;
+    private $category;
 
-    public function getPictures()
+    public function __construct()
+    {
+        $this->id = -1;
+        $this->name = '';
+        $this->price = '';
+        $this->description = '';
+        $this->pictures = [];
+        $this->category = '';
+    }
+
+    public function getAllPictures()
     {
         // 
+    }
+
+    public function getPictureById($pictureId)
+    {
+
     }
 
     public function addPicture()
     {
         
+    }
+
+    public function deletePicture($pictureId)
+    {
+
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
     }
     
     /**
@@ -59,17 +89,17 @@ class Product
     /**
      * @return mixed
      */
-    public function getDecription()
+    public function getDescription()
     {
-        return $this->decription;
+        return $this->description;
     }
 
     /**
-     * @param mixed $decription
+     * @param mixed $description
      */
-    public function setDecription($decription)
+    public function setDescription($description)
     {
-        $this->decription = $decription;
+        $this->description = $description;
     }
 
     /**
@@ -93,14 +123,34 @@ class Product
         $this->stock += $quantity;
     }
 
-    public function removefromStock($quantity)
+    public function removeFromStock($quantity)
     {
         $this->stock -= $quantity;
     }
 
-    public function saveDB()
+    public function saveDB(mysqli $conn)
     {
-        
+
+    }
+
+    public function delete(mysqli $conn)
+    {
+
+    }
+
+    static public function loadProductByName(mysqli $conn, $name)
+    {
+
+    }
+
+    static public function loadProductById(mysqli $conn, $id)
+    {
+
+    }
+
+    static public function loadAllProducts(mysqli $conn)
+    {
+
     }
 
 }

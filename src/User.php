@@ -8,6 +8,7 @@
  */
 class User extends BaseUser
 {
+    private $id;
     private $firstName;
     private $lastName;
 
@@ -41,6 +42,31 @@ class User extends BaseUser
     public function setLastName($lastName)
     {
         $this->lastName = $lastName;
+    }
+
+    public function getAllMessages()
+    {
+
+    }
+
+    public function getAllMessagesFromAdminId (Admin $admin)
+    {
+
+    }
+
+    public function getOrderById(mysqli $conn, $id)
+    {
+
+    }
+
+    public function getAllOrders(mysqli $conn)
+    {
+
+    }
+
+    public function saveDB(mysqli $conn)
+    {
+
     }
 
 }
