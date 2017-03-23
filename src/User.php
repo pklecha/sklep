@@ -8,9 +8,11 @@
  */
 class User extends BaseUser
 {
-    private $id;
-    private $firstName;
-    private $lastName;
+    private $id = -1;
+    private $firstName = '';
+    private $lastName = '';
+    private $email = '';
+    private $password = '';
 
     /**
      * @return mixed
@@ -44,6 +46,73 @@ class User extends BaseUser
         $this->lastName = $lastName;
     }
 
+    /**
+     * @return string
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    /**
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        // później zaminić na
+        // $this->password = password_hash($password, PASSWORD_DEFAULT);
+        $this->password = $password;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+
+    static public function loadUserByEmail(\PDO $conn, $email)
+    {
+        $sql = sprintf('SELECT * FROM user WHERE email = %d', $email);
+
+        $result = $conn->query($sql);
+
+        if (!$result) {
+            die('Query error: ' . $conn->error);
+        }
+
+        if ($result->rowCount()) {
+            $row = $result->fetch();
+            $user = new User();
+            $user->id = $row['id'];
+            $user->firstName = $row['firstname'];
+            $user->lastName = $row['lastname'];
+            $user->email = $row['email'];
+            $user->password = $row['password'];
+            return $user;
+        } else {
+            return false;
+        }
+    }
+
     public function getAllMessages()
     {
 
@@ -63,6 +132,7 @@ class User extends BaseUser
     {
 
     }
+
 
     public function saveDB(mysqli $conn)
     {
