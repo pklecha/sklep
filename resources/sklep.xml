@@ -1,141 +1,21 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-- phpMyAdmin XML Dump
-- version 4.5.4.1deb2ubuntu2
-- https://www.phpmyadmin.net
--
-- Host: localhost
-- Generation Time: Mar 21, 2017 at 11:10 PM
-- Server version: 5.7.17-0ubuntu0.16.04.1
-- PHP Version: 7.0.15-0ubuntu0.16.04.4
--->
-
-<pma_xml_export version="1.0" xmlns:pma="http://www.phpmyadmin.net/some_doc_url/">
-    <!--
-    - Structure schemas
-    -->
-    <pma:structure_schemas>
-        <pma:database name="sklep" collation="utf8_general_ci" charset="utf8">
-            <pma:table name="address">
-                CREATE TABLE `address` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `street` varchar(255) NOT NULL,
-                  `postcode` varchar(255) NOT NULL,
-                  `town` varchar(255) NOT NULL,
-                  `user_id` int(11) NOT NULL,
-                  PRIMARY KEY (`id`),
-                  KEY `user_id` (`user_id`),
-                  CONSTRAINT `address_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-            <pma:table name="admin">
-                CREATE TABLE `admin` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `name` varchar(255) NOT NULL,
-                  `email` varchar(255) NOT NULL,
-                  `password` varchar(255) NOT NULL,
-                  PRIMARY KEY (`id`),
-                  UNIQUE KEY `email` (`email`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-            <pma:table name="category">
-                CREATE TABLE `category` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `name` varchar(255) NOT NULL,
-                  `description` text NOT NULL,
-                  PRIMARY KEY (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-            <pma:table name="message">
-                CREATE TABLE `message` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `admin_id` int(11) NOT NULL,
-                  `order_id` int(11) NOT NULL,
-                  `message` text NOT NULL,
-                  `datetime` int(11) NOT NULL,
-                  PRIMARY KEY (`id`),
-                  KEY `admin_id` (`admin_id`),
-                  KEY `order_id` (`order_id`),
-                  CONSTRAINT `message_ibfk_1` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`id`),
-                  CONSTRAINT `message_ibfk_3` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-            <pma:table name="order">
-                CREATE TABLE `order` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `datetime` int(11) NOT NULL,
-                  `user_id` int(11) NOT NULL,
-                  `totalprice` decimal(7,2) NOT NULL,
-                  `status` varchar(255) NOT NULL,
-                  `comments` text NOT NULL,
-                  PRIMARY KEY (`id`),
-                  KEY `user_id` (`user_id`),
-                  CONSTRAINT `order_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-            <pma:table name="orderedproducts">
-                CREATE TABLE `orderedproducts` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `product_id` int(11) NOT NULL,
-                  `order_id` int(11) NOT NULL,
-                  `purchaseprice` decimal(7,2) NOT NULL,
-                  `quantity` int(11) NOT NULL,
-                  PRIMARY KEY (`id`),
-                  KEY `product_id` (`product_id`),
-                  KEY `order_id` (`order_id`),
-                  CONSTRAINT `orderedproducts_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
-                  CONSTRAINT `orderedproducts_ibfk_2` FOREIGN KEY (`order_id`) REFERENCES `order` (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-            </pma:table>
-            <pma:table name="photo">
-                CREATE TABLE `photo` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `path` varchar(255) NOT NULL,
-                  `product_id` int(11) NOT NULL,
-                  PRIMARY KEY (`id`),
-                  KEY `product_id` (`product_id`),
-                  CONSTRAINT `photo_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-            <pma:table name="product">
-                CREATE TABLE `product` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `name` varchar(255) NOT NULL,
-                  `description` text NOT NULL,
-                  `stock` int(11) NOT NULL,
-                  `price` decimal(7,2) NOT NULL,
-                  `category_id` int(11) NOT NULL,
-                  PRIMARY KEY (`id`),
-                  KEY `category_id` (`category_id`),
-                  CONSTRAINT `product_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-            <pma:table name="user">
-                CREATE TABLE `user` (
-                  `id` int(11) NOT NULL AUTO_INCREMENT,
-                  `firstname` varchar(255) NOT NULL,
-                  `lastname` varchar(255) NOT NULL,
-                  `email` varchar(255) NOT NULL,
-                  `password` varchar(255) NOT NULL,
-                  PRIMARY KEY (`id`),
-                  UNIQUE KEY `email` (`email`)
-                ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-            </pma:table>
-        </pma:database>
-    </pma:structure_schemas>
-
-    <!--
-    - Database: 'sklep'
-    -->
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <database name="sklep">
-        <!-- Table address -->
-        <!-- Table admin -->
-        <!-- Table category -->
-        <!-- Table message -->
-        <!-- Table order -->
-        <!-- Table orderedproducts -->
-        <!-- Table photo -->
-        <!-- Table product -->
-        <!-- Table user -->
+        <table_data name="user">
+            <row>
+                <field name="id">1</field>
+                <field name="firstname">Jan</field>
+                <field name="lastname">Kowalski</field>
+                <field name="email">jan.kowalski@gmail.com</field>
+                <field name="password">123456</field>
+            </row>
+            <row>
+                <field name="id">2</field>
+                <field name="firstname">Karol</field>
+                <field name="lastname">Nowak</field>
+                <field name="email">karol.nowak@gmail.com</field>
+                <field name="password">123456</field>
+            </row>
+        </table_data>
     </database>
-</pma_xml_export>
+</mysqldump>
