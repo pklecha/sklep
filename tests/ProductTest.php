@@ -105,4 +105,24 @@ class ProductTest extends AbstractDateBaseTest
         $this->assertEquals("Category 1 description", $product->getCategoryDescription());
     }
 
+    public function testAddNewProduct()
+    {
+        // tworzenie nowego obiektu z tymczasowym id -1
+        $product = new Product();
+        $product->setName("Product 2");
+        $product->setDescription("Product 2 description");
+        $product->setPrice(123.45);
+        $product->setCategory($this->pdo, 1);
+        $this->assertEquals(-1, $product->getId());
+        $this->assertEquals("Product 2", $product->getName());
+        $this->assertEquals("Product 2 description", $product->getDescription());
+        $this->assertEquals(0, $product->getStock());
+        $this->assertEquals(123.45, $product->getPrice());
+        $this->assertEquals(1, $product->getCategoryId());
+        // zapisywanie produktu do bazy
+        $product->saveDB($this->pdo);
+        $product2 = Product::loadProductById($this->pdo, 2);
+        $this->assertEquals(2, $product2->getId());
+    }
+
 }

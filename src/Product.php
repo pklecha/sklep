@@ -22,6 +22,7 @@ class Product
         $this->name = '';
         $this->price = '';
         $this->description = '';
+        $this->stock = 0;
         $this->pictures = [];
     }
 
@@ -118,6 +119,14 @@ class Product
     }
 
     /**
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->category->getId();
+    }
+
+    /**
      * @return string
      */
     public function getCategoryName()
@@ -131,6 +140,11 @@ class Product
     public function getCategoryDescription()
     {
         return $this->category->getDescription();
+    }
+
+    public function setCategory(\PDO $conn, $id)
+    {
+        $this->category = Category::loadCategoryById($conn, $id);
     }
 
     public function addToStock($quantity)
@@ -150,9 +164,30 @@ class Product
         }
     }
 
-    public function saveDB(mysqli $conn)
+    public function saveDB(\PDO $conn)
     {
+        {
+            if (-1 === $this->id) {
+                $sql = $conn->prepare("INSERT INTO `product` (`name`, `description`, `stock`, `price`, `category_id`) VALUES (?, ?, ?, ?, ?);");
+                $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId()]);
 
+                if($result) {
+                    $this->id = $conn->lastInsertId();
+                    return true;
+                }
+                return false;
+            } else {
+                $sql = sprintf("UPDATE product SET name='%s', description='%s', stock=%d, price=%f, category_id=%d WHERE id='%d'",
+                    $this->name, $this->description, $this->stock, $this->price, $this->category
+                );
+                $result = $conn->query($sql);
+
+                if ($result) {
+                    return true;
+                }
+                return false;
+            }
+        }
     }
 
     public function delete(mysqli $conn)
