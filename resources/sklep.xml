@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <database name="sklep">
+        <table_data name="category">
+            <row>
+                <field name="id">1</field>
+                <field name="name">Category 1</field>
+                <field name="description">Category 1 description</field>
+            </row>
+        </table_data>
         <table_data name="user">
             <row>
                 <field name="id">1</field>
@@ -15,6 +22,16 @@
                 <field name="lastname">Nowak</field>
                 <field name="email">karol.nowak@gmail.com</field>
                 <field name="password">123456</field>
+            </row>
+        </table_data>
+        <table_data name="product">
+            <row>
+                <field name="id">1</field>
+                <field name="name">iPhone</field>
+                <field name="description">Apple smart phone</field>
+                <field name="stock">0</field>
+                <field name="price">2999.99</field>
+                <field name="category_id">1</field>
             </row>
         </table_data>
     </database>

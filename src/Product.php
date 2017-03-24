@@ -23,7 +23,6 @@ class Product
         $this->price = '';
         $this->description = '';
         $this->pictures = [];
-        $this->category = '';
     }
 
     public function getAllPictures()
@@ -118,14 +117,37 @@ class Product
         $this->stock = $stock;
     }
 
+    /**
+     * @return string
+     */
+    public function getCategoryName()
+    {
+        return $this->category->getName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getCategoryDescription()
+    {
+        return $this->category->getDescription();
+    }
+
     public function addToStock($quantity)
     {
-        $this->stock += $quantity;
+        if (is_int($quantity)) {
+            $this->stock += $quantity;
+        }
     }
 
     public function removeFromStock($quantity)
     {
-        $this->stock -= $quantity;
+        if (is_int($quantity)) {
+            $this->stock -= $quantity;
+            if ($this->stock < 0) {
+                $this->stock = 0;
+            }
+        }
     }
 
     public function saveDB(mysqli $conn)
@@ -143,9 +165,30 @@ class Product
 
     }
 
-    static public function loadProductById(mysqli $conn, $id)
+    static public function loadProductById(\PDO $conn, $id)
     {
+        $sql = sprintf("SELECT * FROM product WHERE id=%d", $id);
+        $result = $conn->query($sql);
 
+        if(!$result) {
+            die ("Query error: " . $conn->connect_errno . ", " . $conn->error);
+        }
+
+        if ($result->rowCount()) {
+            $prodArray = $result->fetch();
+            $product = new Product();
+
+            $product->id = $prodArray['id'];
+            $product->name = $prodArray['name'];
+            $product->description = $prodArray['description'];
+            $product->stock = $prodArray['stock'];
+            $product->price = $prodArray['price'];
+            $product->category = Category::loadCategoryById($conn, $prodArray['category_id']);
+
+            return $product;
+        } else {
+            return false;
+        }
     }
 
     static public function loadAllProducts(mysqli $conn)
