@@ -13,7 +13,7 @@ class CategoryTest extends AbstractDateBaseTest
         $pdo = $this->getConnection()->getConnection();
 
         $result = $pdo->query("SELECT * FROM category");
-        $this->assertEquals(1, $result->rowCount());
+        $this->assertGreaterThan(1, $result->rowCount());
     }
 
     public function testLoadCategoryById()

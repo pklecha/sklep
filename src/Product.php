@@ -177,10 +177,8 @@ class Product
                 }
                 return false;
             } else {
-                $sql = sprintf("UPDATE product SET name='%s', description='%s', stock=%d, price=%f, category_id=%d WHERE id='%d'",
-                    $this->name, $this->description, $this->stock, $this->price, $this->category
-                );
-                $result = $conn->query($sql);
+                $sql = $conn->prepare("UPDATE product SET name=?, description=?, stock=?, price=?, category_id=?");
+                $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId()]);
 
                 if ($result) {
                     return true;
@@ -190,23 +188,25 @@ class Product
         }
     }
 
-    public function delete(mysqli $conn)
+    public function delete(\PDO $conn)
     {
-
+        if ($this->id != -1) {
+            $sql = $conn->prepare("DELETE FROM product WHERE id=?");
+            $result = $sql->execute([$this->id]);
+            if ($result) {
+                $this->id = -1;
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
-    static public function loadProductByName(mysqli $conn, $name)
+    static public function loadProductByName(\PDO $conn, $name)
     {
-
-    }
-
-    static public function loadProductById(\PDO $conn, $id)
-    {
-        $sql = sprintf("SELECT * FROM product WHERE id=%d", $id);
-        $result = $conn->query($sql);
-
+        $result = $conn->query("SELECT * FROM product WHERE name LIKE \"" . $name . "%\"");
         if(!$result) {
-            die ("Query error: " . $conn->connect_errno . ", " . $conn->error);
+            die ("Query error: " . $conn->errorCode() . ", " . $conn->errorInfo());
         }
 
         if ($result->rowCount()) {
@@ -226,9 +226,51 @@ class Product
         }
     }
 
-    static public function loadAllProducts(mysqli $conn)
+    static public function loadProductById(\PDO $conn, $id)
     {
+        $result = $conn->query("SELECT * FROM product WHERE id=" . $id);
+        if(!$result) {
+            die ("Query error: " . $conn->errorCode() . ", " . $conn->errorInfo());
+        }
 
+        if ($result->rowCount()) {
+            $prodArray = $result->fetch();
+            $product = new Product();
+
+            $product->id = $prodArray['id'];
+            $product->name = $prodArray['name'];
+            $product->description = $prodArray['description'];
+            $product->stock = $prodArray['stock'];
+            $product->price = $prodArray['price'];
+            $product->category = Category::loadCategoryById($conn, $prodArray['category_id']);
+
+            return $product;
+        } else {
+            return false;
+        }
+    }
+
+    static public function loadAllProducts(\PDO $conn)
+    {
+        $allProducts = [];
+        $result = $conn->query("SELECT * FROM product");
+        if ($result->rowCount() > 0) {
+            while ($prodArray = $result->fetch(PDO::FETCH_ASSOC)) {
+                $product = new Product();
+
+                $product->id = $prodArray['id'];
+                $product->name = $prodArray['name'];
+                $product->description = $prodArray['description'];
+                $product->stock = $prodArray['stock'];
+                $product->price = $prodArray['price'];
+                $product->category = Category::loadCategoryById($conn, $prodArray['category_id']);
+
+                $allProducts[] = $product;
+            }
+            return $allProducts;
+        } else {
+            return false;
+        }
     }
 
 }

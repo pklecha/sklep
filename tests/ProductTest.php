@@ -121,8 +121,75 @@ class ProductTest extends AbstractDateBaseTest
         $this->assertEquals(1, $product->getCategoryId());
         // zapisywanie produktu do bazy
         $product->saveDB($this->pdo);
-        $product2 = Product::loadProductById($this->pdo, 2);
-        $this->assertEquals(2, $product2->getId());
+        $this->assertEquals(2, $product->getId());
     }
 
+    public function testUpdateProduct()
+    {
+        $product = Product::loadProductById($this->pdo, 1);
+        $product->setName("Modified Product");
+        $product->setDescription("Modified Product description");
+        $product->setStock(5);
+        $product->setPrice(99.99);
+        $product->setCategory($this->pdo, 2);
+        $product->saveDB($this->pdo);
+        $newProduct = Product::loadProductById($this->pdo,1);
+        $this->assertEquals(1, $newProduct->getId());
+        $this->assertEquals("Modified Product", $newProduct->getName());
+        $this->assertEquals("Modified Product description", $newProduct->getDescription());
+        $this->assertEquals(5, $newProduct->getStock());
+        $this->assertEquals(99.99, $newProduct->getPrice());
+        $this->assertEquals(2, $newProduct->getCategoryId());
+        $this->assertEquals("Category 2", $newProduct->getCategoryName());
+    }
+
+    public function testDeleteProduct()
+    {
+        // tworzenie nowego produktu
+        $product = new Product();
+        $product->setName("Product 2");
+        $product->setDescription("Product 2 description");
+        $product->setPrice(123.45);
+        $product->setCategory($this->pdo, 1);
+        $product->saveDB($this->pdo);
+        // sprawdzenie czy jest dodany do bazy
+        $this->assertEquals(2, $product->getId());
+        // usuniecie
+        $product->delete($this->pdo);
+        $this->assertFalse(Product::loadProductById($this->pdo,2));
+    }
+
+    public function testLoadProductByName()
+    {
+        $product = Product::loadProductByName($this->pdo, "iPhone");
+        $this->assertEquals(1, $product->getId());
+        $product2 = Product::loadProductByName($this->pdo, "iPh");
+        $this->assertEquals(1, $product2->getId());
+    }
+
+    public function testLoadAllProducts()
+    {
+        $product = new Product();
+        $product->setName("Product 2");
+        $product->setDescription("Product 2 description");
+        $product->setPrice(123.45);
+        $product->setCategory($this->pdo, 1);
+        $product->saveDB($this->pdo);
+        // utworzenie tablicy ze wszystkimi obiektami Product
+        $products = Product::loadAllProducts($this->pdo);
+        // czy jest tablicą
+        $this->assertTrue(is_array($products));
+        // czy elementy tablicy są instancjami Product
+        foreach ($products as $item) {
+            $this->assertInstanceOf(Product::class, $product);
+        }
+        // czy mamy dostep do metod publicznych pierwszego elementu
+        $this->assertEquals(1, $products[0]->getId());
+        $this->assertEquals("iPhone", $products[0]->getName());
+    }
+
+    public function testAddPicture()
+    {
+        
+    }
 }
