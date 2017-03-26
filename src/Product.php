@@ -13,7 +13,7 @@ class Product
     private $price;
     private $description;
     private $stock;
-    private $pictures;
+    private $photos;
     private $category;
 
     public function __construct()
@@ -23,25 +23,33 @@ class Product
         $this->price = '';
         $this->description = '';
         $this->stock = 0;
-        $this->pictures = [];
+        $this->photos = [];
     }
 
-    public function getAllPictures()
+    public function setPhotos(\PDO $conn)
     {
-        // 
+        $this->photos = Photo::loadPhotosByProductId($conn, $this->id);
     }
 
-    public function getPictureById($pictureId)
+    public function getPhotos()
     {
-
+        return $this->photos;
     }
 
-    public function addPicture()
+    public function getPhotoById($id)
+    {
+        if (key_exists($id, $this->photos)) {
+            return $this->photos[$id];
+        }
+        return false;
+    }
+
+    public function addPhoto()
     {
         
     }
 
-    public function deletePicture($pictureId)
+    public function deletePhoto($pictureId)
     {
 
     }

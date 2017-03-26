@@ -188,8 +188,11 @@ class ProductTest extends AbstractDateBaseTest
         $this->assertEquals("iPhone", $products[0]->getName());
     }
 
-    public function testAddPicture()
+    public function testGetAllPhotos()
     {
-        
+        $product = Product::loadProductById($this->pdo, 1);
+        $product->setPhotos($this->pdo);
+        $this->assertInternalType('array', $product->getPhotos());
+
     }
 }

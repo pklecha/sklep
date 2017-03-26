@@ -13,6 +13,23 @@
                 <field name="description">Category 2 description</field>
             </row>
         </table_data>
+        <table_data name="product">
+            <row>
+                <field name="id">1</field>
+                <field name="name">iPhone</field>
+                <field name="description">Apple smart phone</field>
+                <field name="stock">0</field>
+                <field name="price">2999.99</field>
+                <field name="category_id">1</field>
+            </row>
+        </table_data>
+        <table_data name="photo">
+            <row>
+                <field name="id">1</field>
+                <field name="path">/path/to/photo</field>
+                <field name="product_id">1</field>
+            </row>
+        </table_data>
         <table_data name="user">
             <row>
                 <field name="id">1</field>
@@ -35,21 +52,6 @@
                 <field name="email">ala.makota@gmail.com</field>
                 <field name="password">$2y$10$aW1KN37OXIXyvsM404E0PuQBI5h4g23lbVzNYRkUPB9pYR5PLVbh6</field>
             </row>
-        </table_data>
-        <table_data name="product">
-            <row>
-                <field name="id">1</field>
-                <field name="name">iPhone</field>
-                <field name="description">Apple smart phone</field>
-                <field name="stock">0</field>
-                <field name="price">2999.99</field>
-                <field name="category_id">1</field>
-            </row>
-        </table_data>
-        <table_data name="photo">
-            <field name="id">1</field>
-            <field name="path">/path/to/photo-1</field>
-            <field name="product_id">1</field>
         </table_data>
     </database>
 </mysqldump>
