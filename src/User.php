@@ -8,15 +8,21 @@
  */
 class User extends BaseUser
 {
-    private $id = -1;
-    private $firstName = '';
-    private $lastName = '';
-    private $email = '';
-    private $password = '';
+    private $id;
+    private $firstName;
+    private $lastName;
 
     /**
      * @return mixed
      */
+
+    public function __construct()
+    {
+        $this->id = -1;
+        $this->firstName = '';
+        $this->lastName = '';
+    }
+
     public function getFirstName()
     {
         return $this->firstName;
@@ -47,40 +53,6 @@ class User extends BaseUser
     }
 
     /**
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param string $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * @param string $password
-     */
-    public function setPassword($password)
-    {
-        // później zaminić na
-        // $this->password = password_hash($password, PASSWORD_DEFAULT);
-        $this->password = $password;
-    }
-
-    /**
      * @param int $id
      */
     public function setId($id)
@@ -88,10 +60,14 @@ class User extends BaseUser
         $this->id = $id;
     }
 
+    public function getId()
+    {
+        return $this->id;
+    }
 
     static public function loadUserByEmail(\PDO $conn, $email)
     {
-        $sql = sprintf('SELECT * FROM user WHERE email = %d', $email);
+        $sql = sprintf("SELECT * FROM `user` WHERE email = '%s'", $email);
 
         $result = $conn->query($sql);
 
@@ -100,43 +76,108 @@ class User extends BaseUser
         }
 
         if ($result->rowCount()) {
+
             $row = $result->fetch();
+
             $user = new User();
             $user->id = $row['id'];
             $user->firstName = $row['firstname'];
             $user->lastName = $row['lastname'];
-            $user->email = $row['email'];
-            $user->password = $row['password'];
+            $user->setEmail($row['email']);
+            $user->setPassword($row['password']);
+
             return $user;
         } else {
             return false;
         }
     }
 
-    public function getAllMessages()
+    static public function loadUserById(\PDO $conn, $id)
     {
+        $sql = sprintf("SELECT * FROM `user` WHERE id = %d", $id);
 
+        $result = $conn->query($sql);
+
+        if (!$result) {
+            die('Query error: ' . $conn->error);
+        }
+
+        if ($result->rowCount()) {
+
+            $row = $result->fetch();
+
+            $user = new User();
+            $user->id = $row['id'];
+            $user->firstName = $row['firstname'];
+            $user->lastName = $row['lastname'];
+            $user->setEmail($row['email']);
+            $user->setPassword($row['password']);
+
+            return $user;
+        } else {
+            return false;
+        }
     }
 
-    public function getAllMessagesFromAdminId (Admin $admin)
+    static public function LoadUserAll(\PDO $conn)
     {
+        $allUsers = [];
 
+        $sql = "SELECT * FROM `user`";
+        $result = $conn->query($sql);
+
+        if($result == true && $result->rowCount() != 0) {
+            foreach ($result as $row) {
+                $loadedUser = new User();
+                $loadedUser->id = $row['id'];
+                $loadedUser->firstName = $row['firstname'];
+                $loadedUser->lastName = $row['lastname'];
+                $loadedUser->setPassword($row['password']);
+                $loadedUser->setEmail($row['email']);
+
+                $allUsers[] = $loadedUser;
+            }
+        }
+        return $allUsers;
     }
 
-    public function getOrderById(mysqli $conn, $id)
-    {
 
+    public function saveDB(\PDO $conn)
+    {
+        if ($this->id === -1) {
+            $sql = $conn->prepare("INSERT INTO `user` (`firstname`, `lastname`, `email`, `password`)
+                        VALUES (?, ?, ?, ?);");
+            $result = $sql->execute([$this->firstName, $this->lastName, $this->getEmail(), $this->getPasswordHash()]);
+
+            if($result) {
+                $this->id = $conn->lastInsertId();
+                return true;
+            }
+            return false;
+        } else {
+            $sql = $conn->prepare("UPDATE `user` SET firstname=?, lastname=?, password=? WHERE id =?");
+            $result = $sql->execute([$this->firstName, $this->lastName, $this->getPasswordHash(), $this->id]);
+
+            if($result) {
+                return true;
+            }
+            return false;
+        }
     }
 
-    public function getAllOrders(mysqli $conn)
+    public function deleteDB(\PDO $conn)
     {
+        if ($this->id !== -1) {
+            $sql = $conn->prepare("DELETE FROM `user` WHERE id =?");
+            $result = $sql->execute([$this->id]);
 
+            if($result) {
+                $this->id = -1;
+                return true;
+            }
+            return false;
+
+
+        }
     }
-
-
-    public function saveDB(mysqli $conn)
-    {
-
-    }
-
 }
