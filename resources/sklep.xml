@@ -19,14 +19,21 @@
                 <field name="firstname">Jan</field>
                 <field name="lastname">Kowalski</field>
                 <field name="email">jan.kowalski@gmail.com</field>
-                <field name="password">123456</field>
+                <field name="password">$2y$10$aW1KN37OXIXyvsM404E0PuQBI5h4g23lbVzNYRkUPB9pYR5PLVbh6</field>
             </row>
             <row>
                 <field name="id">2</field>
                 <field name="firstname">Karol</field>
                 <field name="lastname">Nowak</field>
                 <field name="email">karol.nowak@gmail.com</field>
-                <field name="password">123456</field>
+                <field name="password">$2y$10$aW1KN37OXIXyvsM404E0PuQBI5h4g23lbVzNYRkUPB9pYR5PLVbh6</field>
+            </row>
+            <row>
+                <field name="id">3</field>
+                <field name="firstname">Ala</field>
+                <field name="lastname">Makota</field>
+                <field name="email">ala.makota@gmail.com</field>
+                <field name="password">$2y$10$aW1KN37OXIXyvsM404E0PuQBI5h4g23lbVzNYRkUPB9pYR5PLVbh6</field>
             </row>
         </table_data>
         <table_data name="product">

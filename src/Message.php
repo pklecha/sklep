@@ -91,4 +91,14 @@ class Message
     {
         $this->adminId = $adminId;
     }
+
+    public function getAllMessages()
+    {
+
+    }
+
+    public function getAllMessagesFromAdminId (Admin $admin)
+    {
+
+    }
 }
