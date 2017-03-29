@@ -51,7 +51,11 @@ class Product
 
     public function deletePhoto($pictureId)
     {
-
+        if (key_exists($this->photos[$pictureId])) {
+            unset($this->photos[$pictureId]);
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -174,25 +178,23 @@ class Product
 
     public function saveDB(\PDO $conn)
     {
-        {
-            if (-1 === $this->id) {
-                $sql = $conn->prepare("INSERT INTO `product` (`name`, `description`, `stock`, `price`, `category_id`) VALUES (?, ?, ?, ?, ?);");
-                $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId()]);
+        if (-1 === $this->id) {
+            $sql = $conn->prepare("INSERT INTO `product` (`name`, `description`, `stock`, `price`, `category_id`) VALUES (?, ?, ?, ?, ?);");
+            $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId()]);
 
-                if($result) {
-                    $this->id = $conn->lastInsertId();
-                    return true;
-                }
-                return false;
-            } else {
-                $sql = $conn->prepare("UPDATE product SET name=?, description=?, stock=?, price=?, category_id=?");
-                $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId()]);
-
-                if ($result) {
-                    return true;
-                }
-                return false;
+            if($result) {
+                $this->id = $conn->lastInsertId();
+                return true;
             }
+            return false;
+        } else {
+            $sql = $conn->prepare("UPDATE product SET name=?, description=?, stock=?, price=?, category_id=? WHERE id=?");
+            $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId(), $this->id]);
+
+            if ($result) {
+                return true;
+            }
+            return false;
         }
     }
 

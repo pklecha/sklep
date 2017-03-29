@@ -63,11 +63,37 @@ class Photo
 
     public function savePhoto(\PDO $conn)
     {
+        if (-1 === $this->id) {
+            $sql = $conn->prepare("INSERT INTO `photo` (`name`, `description`, `stock`, `price`, `category_id`) VALUES (?, ?, ?, ?, ?);");
+            $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId()]);
 
+            if($result) {
+                $this->id = $conn->lastInsertId();
+                return true;
+            }
+            return false;
+        } else {
+            $sql = $conn->prepare("UPDATE product SET name=?, description=?, stock=?, price=?, category_id=? WHERE id=?");
+            $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId(), $this->id]);
+
+            if ($result) {
+                return true;
+            }
+            return false;
+        }
     }
 
     public function delete(\PDO $conn) {
-
+        if ($this->id != -1) {
+            $sql = $conn->prepare("DELETE FROM photo WHERE id=?");
+            $result = $sql->execute([$this->id]);
+            if ($result) {
+                $this->id = -1;
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
     static public function loadPhotoById(\PDO $conn, $id)
