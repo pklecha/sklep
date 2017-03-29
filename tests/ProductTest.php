@@ -121,7 +121,7 @@ class ProductTest extends AbstractDateBaseTest
         $this->assertEquals(1, $product->getCategoryId());
         // zapisywanie produktu do bazy
         $product->saveDB($this->pdo);
-        $this->assertEquals(2, $product->getId());
+        $this->assertEquals(3, $product->getId());
     }
 
     public function testUpdateProduct()
@@ -141,6 +141,16 @@ class ProductTest extends AbstractDateBaseTest
         $this->assertEquals(99.99, $newProduct->getPrice());
         $this->assertEquals(2, $newProduct->getCategoryId());
         $this->assertEquals("Category 2", $newProduct->getCategoryName());
+        $product2 = new Product();
+        $product2->setName("New product name");
+        $product2->setDescription("New product description");
+        $product2->setStock(3);
+        $product2->setPrice(13.22);
+        $product2->setCategory($this->pdo, 1);
+        $product2->saveDB($this->pdo);
+        $this->assertEquals(3, $product2->getId());
+        $this->assertEquals("New product name", $product2->getName());
+        $this->assertEquals(3, $product2->getStock());
     }
 
     public function testDeleteProduct()
@@ -153,10 +163,10 @@ class ProductTest extends AbstractDateBaseTest
         $product->setCategory($this->pdo, 1);
         $product->saveDB($this->pdo);
         // sprawdzenie czy jest dodany do bazy
-        $this->assertEquals(2, $product->getId());
+        $this->assertEquals(3, $product->getId());
         // usuniecie
         $product->delete($this->pdo);
-        $this->assertFalse(Product::loadProductById($this->pdo,2));
+        $this->assertFalse(Product::loadProductById($this->pdo,3));
     }
 
     public function testLoadProductByName()
@@ -188,11 +198,40 @@ class ProductTest extends AbstractDateBaseTest
         $this->assertEquals("iPhone", $products[0]->getName());
     }
 
-    public function testGetAllPhotos()
+    public function testGetPhotosIds()
     {
         $product = Product::loadProductById($this->pdo, 1);
-        $product->setPhotos($this->pdo);
-        $this->assertInternalType('array', $product->getPhotos());
+        $this->assertInternalType('array', $product->getPhotosIds());
+        $this->assertEquals(1, $product->getPhotosIds()[0]);
+        $this->assertEquals(2, $product->getPhotosIds()[1]);
+        $product2 = Product::loadProductById($this->pdo, 2);
+        $this->assertInternalType('array', $product2->getPhotosIds());
+        $this->assertEquals(3, $product2->getPhotosIds()[0]);
+        $this->assertEquals(4, $product2->getPhotosIds()[1]);
+    }
 
+    public function testAddDeletePhotoToProduct()
+    {
+        $product = Product::loadProductById($this->pdo, 2);
+        $photo = new Photo();
+        $photo->setPath('/new/path');
+        $photo->setProductId(2);
+        $photo->savePhoto($this->pdo);
+        $this->assertEquals(5, $photo->getId());
+        $product->addPhoto($this->pdo, 5);
+        $this->assertEquals(5, $product->getPhotosIds()[2]);
+        $product->deletePhoto(5);
+        $this->assertEquals(2, count($product->getPhotosIds()));
+        $this->assertFalse($product->deletePhoto(5));
+    }
+
+    public function testGetPhotoProperties()
+    {
+        $product = Product::loadProductById($this->pdo, 1);
+        $photo1 = $product->getPhotosIds()[0];
+        $this->assertEquals('/path/to/photo/1', $product->getPhotoPath($photo1));
+        $product2 = Product::loadProductById($this->pdo, 2);
+        $photo2 = $product2->getPhotosIds()[0];
+        $this->assertEquals('/path/to/photo/3', $product2->getPhotoPath($photo2));
     }
 }

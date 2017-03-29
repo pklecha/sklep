@@ -64,8 +64,8 @@ class Photo
     public function savePhoto(\PDO $conn)
     {
         if (-1 === $this->id) {
-            $sql = $conn->prepare("INSERT INTO `photo` (`name`, `description`, `stock`, `price`, `category_id`) VALUES (?, ?, ?, ?, ?);");
-            $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId()]);
+            $sql = $conn->prepare("INSERT INTO `photo` (`path`, `product_id`) VALUES (?, ?);");
+            $result = $sql->execute([$this->path, $this->product_id]);
 
             if($result) {
                 $this->id = $conn->lastInsertId();
@@ -73,8 +73,8 @@ class Photo
             }
             return false;
         } else {
-            $sql = $conn->prepare("UPDATE product SET name=?, description=?, stock=?, price=?, category_id=? WHERE id=?");
-            $result = $sql->execute([$this->name, $this->description, $this->stock, $this->price, $this->getCategoryId(), $this->id]);
+            $sql = $conn->prepare("UPDATE `photo` SET `path`=?, `product_id`=? WHERE id=?");
+            $result = $sql->execute([$this->path, $this->product_id, $this->id]);
 
             if ($result) {
                 return true;
@@ -134,7 +134,8 @@ class Photo
                 $photo->path = $photoArray['path'];
                 $photo->product_id = $product_id;
 
-                $productPhotos[] = $photo;
+                // kazda instancja Photo zapisana bedzie pod indeksem tablicy odpowiadajacym jej id - na potrzeby pozniejszego latwiejszego zarzadzania zdjeciami w kontekscie konkretnych instancji Product
+                $productPhotos[$photoArray['id']] = $photo;
             }
             return $productPhotos;
         } else {

@@ -22,12 +22,35 @@
                 <field name="price">2999.99</field>
                 <field name="category_id">1</field>
             </row>
+            <row>
+                <field name="id">2</field>
+                <field name="name">Samsung S8</field>
+                <field name="description">Samsung smart phone</field>
+                <field name="stock">3</field>
+                <field name="price">2899.99</field>
+                <field name="category_id">2</field>
+            </row>
         </table_data>
         <table_data name="photo">
             <row>
                 <field name="id">1</field>
-                <field name="path">/path/to/photo</field>
+                <field name="path">/path/to/photo/1</field>
                 <field name="product_id">1</field>
+            </row>
+            <row>
+                <field name="id">2</field>
+                <field name="path">/path/to/photo/2</field>
+                <field name="product_id">1</field>
+            </row>
+            <row>
+                <field name="id">3</field>
+                <field name="path">/path/to/photo/3</field>
+                <field name="product_id">2</field>
+            </row>
+            <row>
+                <field name="id">4</field>
+                <field name="path">/path/to/photo/4</field>
+                <field name="product_id">2</field>
             </row>
         </table_data>
         <table_data name="user">

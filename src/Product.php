@@ -31,27 +31,33 @@ class Product
         $this->photos = Photo::loadPhotosByProductId($conn, $this->id);
     }
 
-    public function getPhotos()
+    public function getPhotosIds()
     {
-        return $this->photos;
+        $photosIds = [];
+        foreach ($this->photos as $key => $value) {
+            $photosIds[] = $key;
+        }
+        return $photosIds;
     }
 
-    public function getPhotoById($id)
+    public function getPhotoPath($id)
     {
         if (key_exists($id, $this->photos)) {
-            return $this->photos[$id];
+            return $this->photos[$id]->getPath();
         }
         return false;
     }
 
-    public function addPhoto()
+    public function addPhoto(\PDO $conn, $photoId)
     {
-        
+        if (Photo::loadPhotoById($conn, $photoId)) {
+            $this->photos[$photoId] = Photo::loadPhotoById($conn, $photoId);
+        }
     }
 
     public function deletePhoto($pictureId)
     {
-        if (key_exists($this->photos[$pictureId])) {
+        if (key_exists($pictureId,$this->photos)) {
             unset($this->photos[$pictureId]);
             return true;
         }
@@ -253,6 +259,7 @@ class Product
             $product->stock = $prodArray['stock'];
             $product->price = $prodArray['price'];
             $product->category = Category::loadCategoryById($conn, $prodArray['category_id']);
+            $product->photos = Photo::loadPhotosByProductId($conn, $prodArray['id']);
 
             return $product;
         } else {
