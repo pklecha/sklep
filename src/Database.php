@@ -34,7 +34,7 @@ class Database
         $result = $this->connection->query($query);
         if ($result && $result->num_rows) {
             while ($row = $result->fetch_assoc()) {
-                $results[] = $row;
+                $results[$row['id']] = $row;
             }
         } else {
             return false;

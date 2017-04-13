@@ -26,7 +26,8 @@ class ProductRepository implements \ProductRepositoryInterface
         $product->setStock($productData['stock']);
         $product->setCategoryId($productData['category_id']);
         $productPhotos = new PhotoRepository($this->db);
-        $product->setPhotos($productPhotos->findPhotoByProductId($id));
+        $arr = $productPhotos->findPhotoByProductId($id);
+        $product->setPhotos($arr);
         return $product;
     }
 
@@ -38,16 +39,20 @@ class ProductRepository implements \ProductRepositoryInterface
         if (count($productData) > 1) {
             return false;
         } else {
-            $product = new Product();
-            $product->setId($productData[0]['id']);
-            $product->setName($productData[0]['name']);
-            $product->setDescription($productData[0]['description']);
-            $product->setPrice($productData[0]['price']);
-            $product->setStock($productData[0]['stock']);
-            $product->setCategoryId($productData[0]['category_id']);
-            $productPhotos = new PhotoRepository($this->db);
-            $product->setPhotos($productPhotos->findPhotoByProductId($productData[0]['id']));
-            return $product;
+            // even though there's only one element in the array we don't know its index so we have to access it through foreach loop
+            foreach ($productData as $data) {
+                $product = new Product();
+                $product->setId($data['id']);
+                $product->setName($data['name']);
+                $product->setDescription($data['description']);
+                $product->setPrice($data['price']);
+                $product->setStock($data['stock']);
+                $product->setCategoryId($data['category_id']);
+                $productPhotos = new PhotoRepository($this->db);
+                $product->setPhotos($productPhotos->findPhotoByProductId($data['id']));
+                return $product;
+            }
+
         }
 
     }

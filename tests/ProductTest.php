@@ -63,6 +63,7 @@ class ProductTest extends AbstractDateBaseTest
         $product->setCategoryId(1);
         $this->assertEquals(-1, $product->getId());
         $product2 = $productsRepository->findProductById(3);
+        var_dump($product2);
         $this->assertEquals('Nokia6230', $product2->getName());
     }
 
